@@ -1,10 +1,5 @@
-from goblet import Goblet
+import logging
 
-discovery = Goblet()
-
-DISCOVERY_RUN_SCHEDULE = "* 23 * * *"
-
-@discovery.schedule(DISCOVERY_RUN_SCHEDULE)
-def run_discovery():
-    discovery.log.info("running discovery service")
+def discovery():
+    logging.info("running discovery service")
     return 'discovery run completed!'

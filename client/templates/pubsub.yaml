@@ -1,0 +1,15 @@
+# Example of the PubSub template usage.
+#
+# In this example, a 'test-topic' is created with two PULL subscriptions.
+# IAM policies are assigned to the topic and to one of the subscriptions.
+# https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit
+
+imports:
+  - path: client/templates/pubsub.py
+    name: pubsub.py
+
+resources:
+  - name: request-pubsub
+    type: pubsub.py
+    properties:
+      name: request-queue

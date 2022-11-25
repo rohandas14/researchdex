@@ -23,6 +23,8 @@ gcloud services enable servicemanagement.googleapis.com
 gcloud services enable cloudscheduler.googleapis.com
 gcloud services enable pubsub.googleapis.com        
 gcloud services enable logging.googleapis.com
+gcloud services enable deploymentmanager.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
 ```
 4. Run google cloud authentication and set configurations:
 project_id: researchdex, 
