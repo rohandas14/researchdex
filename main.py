@@ -2,6 +2,7 @@ from goblet import Goblet, jsonify, goblet_entrypoint, Response
 import logging
 from service.discovery import discovery
 from service.result_aggregator import aggregate_result
+from client.pubsub_client import PubSub
 
 app = Goblet(function_name="researchdex", local='test')
 app.log.setLevel(logging.INFO)  # configure goblet logger level
@@ -31,11 +32,15 @@ def main(request):
 @app.route('/slash/prefs', methods=["POST"])
 def update_preferences():
     r = app.current_request
-    if "text" in r.form and "response_url" in r.form:
-        user_id = r.form['user_id']
+    if "user_id" in r.form and "text" in r.form and "response_url" in r.form:
         preferences = r.form['text'].split(",")
         preferences = [preference.strip() for preference in preferences]
-        response_url = r.form['response_url']
-    success_msg = "Your preferences were updated successfully."
-    #return Response({"success": "ok"}, headers={"Content-Type": "application/json"}, status_code=200)
+        pub_msg = {
+            'user_id': r.form['user_id'],
+            'preferences': preferences,
+            'response_url': r.form['response_url']
+        }
+    pubsub_client = PubSub("researchdex", "preferences_queue")    
+    pubsub_client.publish(pub_msg)    
+    success_msg = "Your request to update your preferences was received."
     return success_msg
