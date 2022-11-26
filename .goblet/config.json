@@ -1,3 +1,6 @@
 {
-    "cloudfunction": {}
+    "cloudfunction": {},
+    "apiConfig": {
+        "gatewayServiceAccount": "projects/-/serviceAccounts/researchdex@appspot.gserviceaccount.com"
+    }
 }

@@ -5,7 +5,7 @@
 # https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit
 
 imports:
-  - path: client/templates/pubsub.py
+  - path: ./pubsub.py
     name: pubsub.py
 
 resources:
@@ -13,3 +13,7 @@ resources:
     type: pubsub.py
     properties:
       name: request-queue
+  - name: preferences-pubsub
+    type: pubsub.py
+    properties:
+      name: preferences-queue

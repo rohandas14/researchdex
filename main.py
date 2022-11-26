@@ -1,9 +1,9 @@
-from goblet import Goblet, jsonify, goblet_entrypoint
+from goblet import Goblet, jsonify, goblet_entrypoint, Response
 import logging
 from service.discovery import discovery
 from service.result_aggregator import aggregate_result
 
-app = Goblet(function_name="researchdex")
+app = Goblet(function_name="researchdex", local='test')
 app.log.setLevel(logging.INFO)  # configure goblet logger level
 goblet_entrypoint(app)
 
@@ -22,9 +22,20 @@ def main(request):
 # def run_discovery():
 #     return discovery()
 
-@app.topic(SUB_TOPIC_NAME)
-def result_aggregator(data):
-    aggregate_result(data)
-    app.log.info("running result aggregator with data: {}".format(data))
-    return 'result aggregator run completed!'
+# @app.topic(SUB_TOPIC_NAME)
+# def result_aggregator(data):
+#     aggregate_result(data)
+#     app.log.info("running result aggregator with data: {}".format(data))
+#     return 'result aggregator run completed!'
 
+@app.route('/slash/prefs', methods=["POST"])
+def update_preferences():
+    r = app.current_request
+    if "text" in r.form and "response_url" in r.form:
+        user_id = r.form['user_id']
+        preferences = r.form['text'].split(",")
+        preferences = [preference.strip() for preference in preferences]
+        response_url = r.form['response_url']
+    success_msg = "Your preferences were updated successfully."
+    #return Response({"success": "ok"}, headers={"Content-Type": "application/json"}, status_code=200)
+    return success_msg

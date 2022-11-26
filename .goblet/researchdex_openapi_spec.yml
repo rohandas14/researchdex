@@ -8,14 +8,14 @@ schemes:
 produces:
 - application/json
 paths:
-  /discovery:
-    get:
+  /slash/prefs:
+    post:
       x-google-backend:
         address: https://us-central1-researchdex.cloudfunctions.net/researchdex
         protocol: h2
         path_translation: APPEND_PATH_TO_ADDRESS
         deadline: 15
-      operationId: get_run_discovery
+      operationId: post_update_preferences
       responses:
         '200':
           description: A successful response
