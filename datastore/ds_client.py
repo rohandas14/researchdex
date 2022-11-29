@@ -1,3 +1,4 @@
+from pydoc_data.topics import topics
 from google.cloud import datastore
 
 class TopicsDS:
@@ -5,8 +6,8 @@ class TopicsDS:
         self.client = datastore.Client()
         self.kind = "Topics"
         
-    def insert(self, name, list):
-        task = datastore.Entity(self.client.key(self.kind))
+    def insert(self, key, name, list):
+        task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
         {
             "name": name,
@@ -27,8 +28,8 @@ class UserDS:
         self.client = datastore.Client()
         self.kind = "Users"
         
-    def insert(self, id, preference_list, timestamp):
-        task = datastore.Entity(self.client.key(self.kind))
+    def insert(self, key, id, preference_list, timestamp):
+        task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
         {
             "id": id,
@@ -50,8 +51,8 @@ class ResultsDS:
         self.client = datastore.Client()
         self.kind = "Results"
         
-    def insert(self, title, link, tags_list, timestamp):
-        task = datastore.Entity(self.client.key(self.kind))
+    def insert(self, key, title, link, tags_list, timestamp):
+        task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
         {
             "title": title,
@@ -68,3 +69,10 @@ class ResultsDS:
 
     def delete(self, key):
         self.client.delete(key)
+
+if __name__ == "__main__":
+
+    datastore_client = datastore.Client()
+    topic = TopicsDS()
+    list = ["AB", "CD"]
+    topic.insert("AI", list)

@@ -4,7 +4,7 @@ from google.cloud import datastore
 def create_entity(datastore_client):
 
     # The Cloud Datastore key for the new entity
-    task1 = datastore.Entity(datastore_client.key("Topics"))
+    task1 = datastore.Entity(datastore_client.key("Topics", "key1"))
     task1.update(
     {
         "name": "Natural Language Processing",
@@ -15,7 +15,7 @@ def create_entity(datastore_client):
     print("created Topics")
 
 
-    task2 = datastore.Entity(datastore_client.key("Users"))
+    task2 = datastore.Entity(datastore_client.key("Users", "key2"))
     task2.update(
     {
         "id": 123,
@@ -28,7 +28,7 @@ def create_entity(datastore_client):
     datastore_client.put(task2)
     print("created Users")
 
-    task3 = datastore.Entity(datastore_client.key("Results"))
+    task3 = datastore.Entity(datastore_client.key("Results", "key3"))
     task3.update(
     {
         "title": "abc",
