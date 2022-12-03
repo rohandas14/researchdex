@@ -25,7 +25,7 @@ def aggregate_results(app, data):
     except Exception as err:
         app.log.error(err)
         response_text = {
-            "text": "There was an error while trying to update your preferences. Please try again."
+            "text": "There was an error while trying to fetch the latest papers. Please try again."
         }
 
     headers = {'Content-Type': 'application/json'}

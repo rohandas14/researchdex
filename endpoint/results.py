@@ -15,5 +15,5 @@ def queue_search_job(request):
         }
     pubsub_client = PubSub(PROJECT_ID, SEARCH_TOPIC_NAME)    
     future = pubsub_client.publish(json.dumps(pub_msg).encode("utf-8"))    
-    success_msg = "Thank you for your request to update your preferences. We are working on it."
+    success_msg = "Thank you for your request for the latest papers. We are working on it."
     return success_msg
