@@ -1,6 +1,6 @@
-#researchdex
+# Reearch Dex
 
-##Quickstart
+## Quickstart
 
 1. Create and activate a virtual environment in python3.7
 ```commandline
