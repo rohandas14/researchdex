@@ -28,6 +28,7 @@ def update_preferences(app, data):
         response_text = {
             "text": "There was an error while trying to update your preferences. Please try again."
         }
+        
     headers = {'Content-Type': 'application/json'}
     try:
         requests.post(data['response_url'], json.dumps(response_text), headers)    
