@@ -1,4 +1,3 @@
-from pydoc_data.topics import topics
 from google.cloud import datastore
 
 class TopicsDS:
@@ -9,42 +8,41 @@ class TopicsDS:
     def insert(self, key, name, list):
         task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
-        {
-            "name": name,
-            "list": list,
-        }
+            {
+                "name": name,
+                "list": list,
+            }
         )
+        self.client.put(task)
 
     def fetch(self, key):
-        task = self.client.get(key)
-
+        task = self.client.get(self.client.key(self.kind, key))
         return task
 
     def delete(self, key):
-        self.client.delete(key)
+        self.client.delete(self.client.key(self.kind, key))
 
 class UserDS:
     def __init__(self):
         self.client = datastore.Client()
         self.kind = "Users"
         
-    def insert(self, key, id, preference_list, timestamp):
+    def insert(self, key, preference_list, timestamp):
         task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
-        {
-            "id": id,
-            "preferences": preference_list,
-            "timestamp": timestamp,
-        }
+            {
+                "preferences": preference_list,
+                "search_timestamp": timestamp,
+            }
         )
+        self.client.put(task)
 
     def fetch(self, key):
-        task = self.client.get(key)
-
+        task = self.client.get(self.client.key(self.kind, key))
         return task
 
     def delete(self, key):
-        self.client.delete(key)
+        self.client.delete(self.client.key(self.kind, key))
 
 class ResultsDS:
     def __init__(self):
@@ -54,25 +52,18 @@ class ResultsDS:
     def insert(self, key, title, link, tags_list, timestamp):
         task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
-        {
-            "title": title,
-            "link": link,
-            "tags": tags_list,
-            "timestamp": timestamp,
-        }
+            {
+                "title": title,
+                "link": link,
+                "tags": tags_list,
+                "timestamp": timestamp,
+            }
         )
+        self.client.put(task)
 
     def fetch(self, key):
-        task = self.client.get(key)
-
+        task = self.client.get(self.client.key(self.kind, key))
         return task
 
     def delete(self, key):
-        self.client.delete(key)
-
-if __name__ == "__main__":
-
-    datastore_client = datastore.Client()
-    topic = TopicsDS()
-    list = ["AB", "CD"]
-    topic.insert("AI", list)
+        self.client.delete(self.client.key(self.kind, key))

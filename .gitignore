@@ -1,5 +1,10 @@
 .idea/
 __pycache__/
+venv/
 venv37/
 .goblet/researchdex.zip
- service/__pycache__/
+client/__pycache__/
+endpoint/__pycache__/
+resources/__pycache__/
+service/__pycache__/
+.vscode/

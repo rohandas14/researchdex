@@ -9,10 +9,10 @@ imports:
     name: pubsub.py
 
 resources:
-  - name: request-pubsub
+  - name: search-pubsub
     type: pubsub.py
     properties:
-      name: request-queue
+      name: search-queue
   - name: preferences-pubsub
     type: pubsub.py
     properties:

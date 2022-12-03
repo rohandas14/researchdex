@@ -1,17 +1,18 @@
-from goblet import Goblet, jsonify, goblet_entrypoint, Response
-import json
 import logging
+from goblet import Goblet, jsonify, goblet_entrypoint
+from endpoint.preferences import queue_update_job
+from endpoint.results import queue_search_job
 from service.discovery import discovery
-from service.result_aggregator import aggregate_result
-from client.pubsub_client import PubSub
+from service.preferences import update_preferences
+from service.results import aggregate_results
 
 app = Goblet(function_name="researchdex")
 app.log.setLevel(logging.INFO)  # configure goblet logger level
 goblet_entrypoint(app)
 
 PROJECT_ID = "researchdex"
-SUB_TOPIC_NAME = "request-queue"    # Name of pubsub trigger topic
-PREF_TOPIC_NAME = "preferences-queue"     # Name of preferences pubsub topic
+SEARCH_TOPIC_NAME = "search-queue"
+PREFERENCES_TOPIC_NAME = "preferences-queue"
 #TODO: Update the schedule for run
 DISCOVERY_RUN_SCHEDULE = "* 23 * * *" # Schedule of discovery run
 
@@ -25,24 +26,20 @@ def main(request):
 # def run_discovery():
 #     return discovery()
 
-@app.topic(SUB_TOPIC_NAME)
-def result_aggregator(data):
-    aggregate_result(data)
-    app.log.info("running result aggregator with data: {}".format(data))
-    return 'result aggregator run completed!'
+@app.route('/slash/search', methods=["POST"])
+def search_endpoint():
+    success_msg = queue_search_job(app.current_request)
+    return success_msg
 
 @app.route('/slash/prefs', methods=["POST"])
-def update_preferences():
-    r = app.current_request
-    if "user_id" in r.form and "text" in r.form and "response_url" in r.form:
-        preferences = r.form['text'].split(",")
-        preferences = [preference.strip() for preference in preferences]
-        pub_msg = {
-            'user_id': r.form['user_id'],
-            'preferences': preferences,
-            'response_url': r.form['response_url']
-        }
-    pubsub_client = PubSub(PROJECT_ID, PREF_TOPIC_NAME)    
-    future = pubsub_client.publish(json.dumps(pub_msg).encode("utf-8"))    
-    success_msg = "Your request to update your preferences was received."
+def update_preferences_endpoint():
+    success_msg = queue_update_job(app.current_request)
     return success_msg
+
+@app.topic(SEARCH_TOPIC_NAME)
+def result_aggregator_worker(data):
+    aggregate_results(app, data)
+
+@app.topic(PREFERENCES_TOPIC_NAME)
+def update_preferences_worker(data):
+    update_preferences(app, data)
