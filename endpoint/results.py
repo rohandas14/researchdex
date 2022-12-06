@@ -8,6 +8,8 @@ def queue_search_job(request):
     if "user_id" in request.form and "text" in request.form and "response_url" in request.form:
         preferences = request.form['text'].split(",")
         preferences = [preference.strip() for preference in preferences]
+        if len(preferences) == 1 and preferences[0] == '':
+            preferences = []
         pub_msg = {
             'user_id': request.form['user_id'],
             'preferences': preferences,

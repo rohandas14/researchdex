@@ -52,18 +52,10 @@ class ResultsDS:
         self.kind = "Results"
         
     def insert(self, key, result_list):
-        # result list: [element 1, ...]
-        #   element:
-        #         {
-        #             "title": title,
-        #             "link": link,
-        #             "source": source,
-        #             "timestamp": timestamp,
-        #         }
         task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
             {
-            "result_list": result_list,
+                "result_list": result_list,
             }
         )
         self.client.put(task)

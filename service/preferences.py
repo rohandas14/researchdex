@@ -1,5 +1,6 @@
 import json
 import requests
+import traceback
 from client.datastore_client import UserDS
 
 def update_preferences(app, data):
@@ -8,8 +9,8 @@ def update_preferences(app, data):
         data = json.loads(data)
         try:
             user_record = ds_client.fetch(data['user_id'])
-        except Exception as err:
-            app.log.error(err)
+        except:
+            app.log.error(traceback.print_exc())
             user_record = None
         if user_record is not None:
             user_prefs = set(user_record['preferences'])
@@ -18,13 +19,13 @@ def update_preferences(app, data):
             ds_client.insert(data['user_id'], list(user_prefs), user_record['search_timestamp'])
         else:
             user_prefs = set(data['preferences'])
-            ds_client.insert(data['user_id'], list(user_prefs), '')
+            ds_client.insert(data['user_id'], list(user_prefs), 0)
             
         response_text = {
             "text": "Your preferences have been updated."
         }
-    except Exception as err:
-        app.log.error(err)
+    except:
+        app.log.error(traceback.print_exc())
         response_text = {
             "text": "There was an error while trying to update your preferences. Please try again."
         }
@@ -32,5 +33,5 @@ def update_preferences(app, data):
     headers = {'Content-Type': 'application/json'}
     try:
         requests.post(data['response_url'], json.dumps(response_text), headers)    
-    except Exception as err:
-        app.log.error(err)
+    except:
+        app.log.error(traceback.print_exc())
