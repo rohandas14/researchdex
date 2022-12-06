@@ -21,10 +21,10 @@ DISCOVERY_RUN_SCHEDULE = "* 23 * * *" # Schedule of discovery run
 def main(request):
     return jsonify(request.json)
 
-# #TODO: update the route to schedule trigger after development and testing
-# @app.route('/discovery')
-# def run_discovery():
-#     return discovery()
+#TODO: update the route to schedule trigger after development and testing
+@app.route('/discovery')
+def run_discovery():
+    return discovery(app)
 
 @app.route('/slash/search', methods=["POST"])
 def search_endpoint():
