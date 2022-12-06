@@ -5,11 +5,10 @@ class TopicsDS:
         self.client = datastore.Client()
         self.kind = "Topics"
         
-    def insert(self, key, name, list):
+    def insert(self, key, list):
         task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
             {
-                "name": name,
                 "list": list,
             }
         )
@@ -21,6 +20,9 @@ class TopicsDS:
 
     def delete(self, key):
         self.client.delete(self.client.key(self.kind, key))
+
+    def get_all(self):
+        return self.client.query(kind=self.kind).fetch()
 
 class UserDS:
     def __init__(self):
@@ -49,14 +51,19 @@ class ResultsDS:
         self.client = datastore.Client()
         self.kind = "Results"
         
-    def insert(self, key, title, link, tags_list, timestamp):
+    def insert(self, key, result_list):
+        # result list: [element 1, ...]
+        #   element:
+        #         {
+        #             "title": title,
+        #             "link": link,
+        #             "source": source,
+        #             "timestamp": timestamp,
+        #         }
         task = datastore.Entity(self.client.key(self.kind, key))
         task.update(
             {
-                "title": title,
-                "link": link,
-                "tags": tags_list,
-                "timestamp": timestamp,
+            "result_list": result_list,
             }
         )
         self.client.put(task)
