@@ -20,6 +20,9 @@ def aggregate_results(app, data):
         if len(preferences) == 0:
             preferences = user_record['preferences']
             custom_query = False
+        if len(preferences) == 1 and preferences[0] == '-f':
+            preferences = user_record['preferences']
+            custom_query = True
         last_searched = user_record['search_timestamp']
         results = fetch_results(preferences, last_searched, custom_query)
         if len(results) > 0:
