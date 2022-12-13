@@ -1,6 +1,11 @@
 {
-    "cloudfunction": {},
+    "cloudfunction": {
+        "minInstances": 1
+    },
     "apiConfig": {
         "gatewayServiceAccount": "projects/-/serviceAccounts/researchdex@appspot.gserviceaccount.com"
+    },
+    "api_gateway": {
+        "deadline": 60
     }
 }

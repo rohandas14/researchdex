@@ -14,8 +14,8 @@ paths:
         address: https://us-central1-researchdex.cloudfunctions.net/researchdex
         protocol: h2
         path_translation: APPEND_PATH_TO_ADDRESS
-        deadline: 15
-      operationId: get_run_discovery
+        deadline: 60
+      operationId: get_run_discovery_job
       responses:
         '200':
           description: A successful response
@@ -25,7 +25,7 @@ paths:
         address: https://us-central1-researchdex.cloudfunctions.net/researchdex
         protocol: h2
         path_translation: APPEND_PATH_TO_ADDRESS
-        deadline: 15
+        deadline: 60
       operationId: post_search_endpoint
       responses:
         '200':
@@ -36,7 +36,7 @@ paths:
         address: https://us-central1-researchdex.cloudfunctions.net/researchdex
         protocol: h2
         path_translation: APPEND_PATH_TO_ADDRESS
-        deadline: 15
+        deadline: 60
       operationId: post_update_preferences_endpoint
       responses:
         '200':
