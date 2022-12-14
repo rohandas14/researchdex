@@ -1,9 +1,13 @@
 import logging
 import time
-import asyncio
+import json
 
 from client.resp.apis.arxiv_api import Arxiv
 from client.datastore_client import TopicsDS, ResultsDS
+from client.pubsub_client import PubSub
+
+PROJECT_ID = "researchdex"
+TOPIC_QUEUE_NAME = "topic-queue"
 
 RESULT_TITLE_KEY = 'title'
 RESULT_LINK_KEY = 'link'
@@ -12,7 +16,7 @@ RESULT_TIMESTAMP_KEY = 'timestamp'
 
 SOURCE_VAL_ARXIV = 'arxiv'
 
-async def discovery(app):
+def discovery(app):
     try:
         logging.info("running discovery service")
 
@@ -28,19 +32,20 @@ async def discovery(app):
 
         app.log.info("Fetch for topics completed for discovery.")
 
-        tasks = []
+        pubsub_client = PubSub(PROJECT_ID, TOPIC_QUEUE_NAME)
         for topic in topics_to_discover:
-            tasks.append(discovery_per_topic(topic, app))
-        await asyncio.gather(*tasks)
-            # task = asyncio.create_task()
-            # await task
-        app.log.info("Discovery run completed for all topics.")
-        return "Discovery run completed for all topics."
+            topic_msg = {
+                'topic': topic
+            }
+            future = pubsub_client.publish(json.dumps(topic_msg).encode("utf-8"))
+            app.log.info(f"Topic: {topic} queued in for discovery!")
+        app.log.info("all topics queued in for discovery.")
+        return "all topics queued in for discovery."
     except Exception as err:
         app.log.error(err)
         raise f"Error running discovery service: {err}"
 
-async def discovery_per_topic(topic, app):
+def discovery_per_topic(topic, app):
     try:
         arxiv_client = Arxiv()
         result_ds_client = ResultsDS()
