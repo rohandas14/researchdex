@@ -16,6 +16,7 @@ RESULT_TIMESTAMP_KEY = 'timestamp'
 
 SOURCE_VAL_ARXIV = 'arxiv'
 
+
 def discovery(app):
     try:
         logging.info("running discovery service")
@@ -28,7 +29,7 @@ def discovery(app):
 
         topics_to_discover = []
         for result in all_topics_result:
-            topics_to_discover+=result['list']
+            topics_to_discover += result['list']
 
         app.log.info("Fetch for topics completed for discovery.")
 
@@ -44,6 +45,7 @@ def discovery(app):
     except Exception as err:
         app.log.error(err)
         raise f"Error running discovery service: {err}"
+
 
 def discovery_per_topic(topic, app):
     try:

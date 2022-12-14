@@ -22,11 +22,13 @@ TOPIC_QUEUE_NAME = "topic-queue"
 def main(request):
     return jsonify(request.json)
 
-#TODO: update the route to schedule trigger after development and testing
+
+# TODO: update the route to schedule trigger after development and testing
 @app.route('/discovery', deadline=90)
 def run_discovery_job():
     discovery(app)
     return "Discovery run completed!"
+
 
 @app.topic(TOPIC_QUEUE_NAME)
 def run_discovery_per_topic(data):
@@ -34,19 +36,23 @@ def run_discovery_per_topic(data):
     topic = data['topic']
     discovery_per_topic(topic, app)
 
+
 @app.route('/slash/search', methods=["POST"])
 def search_endpoint():
     success_msg = queue_search_job(app.current_request)
     return success_msg
+
 
 @app.route('/slash/prefs', methods=["POST"])
 def update_preferences_endpoint():
     success_msg = queue_update_job(app.current_request)
     return success_msg
 
+
 @app.topic(SEARCH_TOPIC_NAME)
 def result_aggregator_worker(data):
     aggregate_results(app, data)
+
 
 @app.topic(PREFERENCES_TOPIC_NAME)
 def update_preferences_worker(data):

@@ -24,7 +24,7 @@ def aggregate_results(app, data):
             preferences = user_record['preferences']
             custom_query = True
         last_searched = user_record['search_timestamp']
-        results = fetch_results(preferences, last_searched, custom_query)
+        results = fetch_results(app, preferences, last_searched, custom_query)
         if len(results) > 0:
             response_text = compose_results(results)
         else:
@@ -46,12 +46,16 @@ def aggregate_results(app, data):
     except:
         app.log.error(traceback.print_exc())
 
-def fetch_results(preferences, last_searched, custom_query):
+def fetch_results(app, preferences, last_searched, custom_query):
     results_client = ResultsDS()
     aggregate_results = []
     for preference in preferences:
         itr = 0
-        topic_results = results_client.fetch(preference)['result_list']
+        try:
+            topic_results = results_client.fetch(preference)['result_list']
+        except:
+            app.log.error("No such entry in Results DB with: " + preference)
+            continue
         for result in  topic_results:
             if custom_query:
                 candidate = result
