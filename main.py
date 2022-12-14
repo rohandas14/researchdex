@@ -1,11 +1,12 @@
 import logging
+import json
 from goblet import Goblet, jsonify, goblet_entrypoint
 from endpoint.preferences import queue_update_job
 from endpoint.results import queue_search_job
 from service.discovery import discovery
+from service.discovery import discovery_per_topic
 from service.preferences import update_preferences
 from service.results import aggregate_results
-import asyncio
 
 app = Goblet(function_name="researchdex")
 app.log.setLevel(logging.INFO)  # configure goblet logger level
@@ -14,6 +15,7 @@ goblet_entrypoint(app)
 PROJECT_ID = "researchdex"
 SEARCH_TOPIC_NAME = "search-queue"
 PREFERENCES_TOPIC_NAME = "preferences-queue"
+TOPIC_QUEUE_NAME = "topic-queue"
 
 
 @app.http()
@@ -23,8 +25,14 @@ def main(request):
 #TODO: update the route to schedule trigger after development and testing
 @app.route('/discovery', deadline=90)
 def run_discovery_job():
-    asyncio.run(discovery(app))
+    discovery(app)
     return "Discovery run completed!"
+
+@app.topic(TOPIC_QUEUE_NAME)
+def run_discovery_per_topic(data):
+    data = json.loads(data)
+    topic = data['topic']
+    discovery_per_topic(topic, app)
 
 @app.route('/slash/search', methods=["POST"])
 def search_endpoint():

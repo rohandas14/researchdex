@@ -17,3 +17,7 @@ resources:
     type: pubsub.py
     properties:
       name: preferences-queue
+  - name: topic-pubsub
+    type: pubsub.py
+    properties:
+      name: topic-queue
